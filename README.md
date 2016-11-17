@@ -1,1 +1,1 @@
-# blue2
+# blue2 - Nativescript Bluetooth beacon test
