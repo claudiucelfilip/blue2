@@ -5,13 +5,23 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { LoginModule } from './login/login.module';
+import { authProviders, appRoutes } from './app.routing';
 import { RadarModule } from './radar/radar.module';
-import { appRoutes } from './app.routing';
+import { setStatusBarColors, BackendService, LoginService } from "./shared";
+import { NativeScriptHttpModule } from "nativescript-angular/http";
+
 @NgModule({
     declarations: [AppComponent],
     bootstrap: [AppComponent],
+    providers: [
+    BackendService,
+    LoginService,
+    authProviders
+  ],
+
     imports: [
         NativeScriptModule,
+        NativeScriptHttpModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forRoot(appRoutes),
         LoginModule,

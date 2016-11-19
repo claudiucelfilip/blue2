@@ -20,6 +20,9 @@ var AppComponent = (function () {
         this.counter--;
         console.log('tap');
     };
+    AppComponent.prototype.ngOnInit = function () {
+        console.log('test');
+    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',

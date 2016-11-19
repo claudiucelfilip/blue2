@@ -35,12 +35,14 @@ var RadarComponent = (function () {
         });
     };
     RadarComponent.prototype.scan = function () {
+        var _this = this;
         var self = this;
         return bluetooth.startScanning({
             serviceUUIDs: [],
             seconds: 4,
             onDiscovered: function (peripheral) {
                 try {
+                    _this.items.push(peripheral);
                     self.connect(peripheral);
                 }
                 catch (err) {
@@ -50,12 +52,10 @@ var RadarComponent = (function () {
         });
     };
     RadarComponent.prototype.connect = function (result) {
-        var _this = this;
         return bluetooth.connect({
             UUID: result.UUID,
             onConnected: function (peripheral) {
                 console.log(JSON.stringify(peripheral));
-                _this.items.push(peripheral);
                 // bluetooth.read({
                 //     peripheralUUID: peripheral.UUID,
                 //     serviceUUID: '2aaceb00-c5a5-44fd-0000-3fd42d703a4f',
