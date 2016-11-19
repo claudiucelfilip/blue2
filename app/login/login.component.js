@@ -24,10 +24,10 @@ var LoginComponent = (function () {
         this.password.nativeElement.focus();
     };
     LoginComponent.prototype.submit = function () {
-        if (!this.user.isValidEmail()) {
-            shared_1.alert("Enter a valid email address.");
-            return;
-        }
+        // if (!this.user.isValidEmail()) {
+        //   alert("Enter a valid email address.");
+        //   return;
+        // }
         this.isAuthenticating = true;
         if (this.isLoggingIn) {
             this.login();
@@ -37,15 +37,17 @@ var LoginComponent = (function () {
         }
     };
     LoginComponent.prototype.login = function () {
+        // if (getConnectionType() === connectionType.none) {
+        // alert("Beacons requires an internet connection to log in.");
+        // return;
+        // }
         var _this = this;
-        if (connectivity_1.getConnectionType() === connectivity_1.connectionType.none) {
-            shared_1.alert("Beacons requires an internet connection to log in.");
-            return;
-        }
         this.userService.login(this.user)
             .subscribe(function () {
             _this.isAuthenticating = false;
-            _this.router.navigate(["/"]);
+            shared_1.alert("worked");
+            console.log("worked");
+            // this.router.navigate(["/"]);
         }, function (error) {
             shared_1.alert("Unfortunately we could not find your account.");
             _this.isAuthenticating = false;

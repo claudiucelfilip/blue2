@@ -45,10 +45,10 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    if (!this.user.isValidEmail()) {
-      alert("Enter a valid email address.");
-      return;
-    }
+    // if (!this.user.isValidEmail()) {
+    //   alert("Enter a valid email address.");
+    //   return;
+    // }
 
     this.isAuthenticating = true;
     if (this.isLoggingIn) {
@@ -59,16 +59,18 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (getConnectionType() === connectionType.none) {
-      alert("Beacons requires an internet connection to log in.");
-      return;
-    }
+    // if (getConnectionType() === connectionType.none) {
+      // alert("Beacons requires an internet connection to log in.");
+      // return;
+    // }
 
     this.userService.login(this.user)
       .subscribe(
         () => {
           this.isAuthenticating = false;
-          this.router.navigate(["/"]);
+          alert("worked");
+          console.log("worked");
+          // this.router.navigate(["/"]);
         },
         (error) => {
           alert("Unfortunately we could not find your account.");

@@ -5,6 +5,7 @@ var Rx_1 = require("rxjs/Rx");
 require("rxjs/add/operator/do");
 require("rxjs/add/operator/map");
 var backend_service_1 = require("./backend.service");
+var client_id = "hSkvf2jdkTtQQmwtyqeVs3Sn7Uco6eWNv7zFjXCe";
 var LoginService = (function () {
     function LoginService(http) {
         this.http = http;
@@ -20,15 +21,26 @@ var LoginService = (function () {
             .catch(this.handleErrors);
     };
     LoginService.prototype.login = function (user) {
-        var headers = new http_1.Headers();
-        headers.append("Content-Type", "application/json");
-        return this.http.post(backend_service_1.BackendService.apiUrl + "o/token", JSON.stringify({
+        var obj = {
+            client_id: client_id,
+            grant_type: "password",
             username: user.email,
-            password: user.password,
-            grant_type: "password"
-        }), { headers: headers })
+            password: user.password
+        };
+        var transform = function (obj) {
+            var str = [];
+            for (var p in obj)
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            return str.join("&");
+        };
+        var headers = new http_1.Headers({ "Content-Type": "application/x-www-form-urlencoded" });
+        var options = new http_1.RequestOptions({ headers: headers });
+        var url = backend_service_1.BackendService.apiUrl + "o/token/";
+        var data = transform(obj);
+        return this.http.post(url, data, options)
             .map(function (response) { return response.json(); })
             .do(function (data) {
+            console.log(data);
             backend_service_1.BackendService.token = data.Result.access_token;
         })
             .catch(this.handleErrors);
