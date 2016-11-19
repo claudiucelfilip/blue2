@@ -64,8 +64,7 @@ export class LoginComponent implements OnInit {
       // return;
     // }
 
-    this.userService.login(this.user)
-      .subscribe(
+    this.userService.login(this.user).then(
         () => {
           this.isAuthenticating = false;
           alert("worked");

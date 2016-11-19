@@ -42,8 +42,7 @@ var LoginComponent = (function () {
         // return;
         // }
         var _this = this;
-        this.userService.login(this.user)
-            .subscribe(function () {
+        this.userService.login(this.user).then(function () {
             _this.isAuthenticating = false;
             shared_1.alert("worked");
             console.log("worked");

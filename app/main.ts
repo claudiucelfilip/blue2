@@ -3,6 +3,7 @@ import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-an
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { NgModule } from "@angular/core";
+import { HttpModule } from "@angular/http";
 import { AppComponent } from "./app.component";
 import { LoginModule } from './login/login.module';
 import { authProviders, appRoutes } from './app.routing';
@@ -13,13 +14,14 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
 @NgModule({
     declarations: [AppComponent],
     bootstrap: [AppComponent],
-    providers: [
+    providers: [,
     BackendService,
     LoginService,
     authProviders
   ],
 
     imports: [
+        HttpModule,
         NativeScriptModule,
         NativeScriptHttpModule,
         NativeScriptRouterModule,
@@ -27,6 +29,9 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
         LoginModule,
         RadarModule
     ],
+    exports: [
+        NativeScriptHttpModule
+    ]
 })
 class AppComponentModule {}
 

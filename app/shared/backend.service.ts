@@ -5,6 +5,7 @@ const tokenKey = "tokenkey";
 
 export class BackendService {
   static apiUrl = "http://46.101.106.245/api/";
+  static url = "http://46.101.106.245/";
 
   static isLoggedIn(): boolean {
     return !!getString("token");

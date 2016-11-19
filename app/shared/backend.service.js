@@ -18,6 +18,7 @@ var BackendService = (function () {
         configurable: true
     });
     BackendService.apiUrl = "http://46.101.106.245/api/";
+    BackendService.url = "http://46.101.106.245/";
     return BackendService;
 }());
 exports.BackendService = BackendService;

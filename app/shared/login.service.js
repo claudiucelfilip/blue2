@@ -4,6 +4,7 @@ var http_1 = require("@angular/http");
 var Rx_1 = require("rxjs/Rx");
 require("rxjs/add/operator/do");
 require("rxjs/add/operator/map");
+var http_2 = require("http");
 var backend_service_1 = require("./backend.service");
 var client_id = "hSkvf2jdkTtQQmwtyqeVs3Sn7Uco6eWNv7zFjXCe";
 var LoginService = (function () {
@@ -33,15 +34,12 @@ var LoginService = (function () {
                 str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
             return str.join("&");
         };
-        var headers = new http_1.Headers({ "Content-Type": "application/x-www-form-urlencoded" });
-        var options = new http_1.RequestOptions({ headers: headers });
-        var url = backend_service_1.BackendService.apiUrl + "o/token/";
+        var url = backend_service_1.BackendService.url + "o/token/";
         var data = transform(obj);
-        return this.http.post(url, data, options)
-            .map(function (response) { return response.json(); })
-            .do(function (data) {
+        return http_2.request({ url: url, method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, content: data }).then(function (data) {
             console.log(data);
-            backend_service_1.BackendService.token = data.Result.access_token;
+            var d = data.content.toJSON();
+            backend_service_1.BackendService.token = d.access_token;
         })
             .catch(this.handleErrors);
     };
