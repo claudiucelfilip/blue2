@@ -16,6 +16,7 @@
         "app/**/*"
     ],
     "files": [
-        "node_modules/nativescript-bluetooth/bluetooth.d.ts"
+        "node_modules/nativescript-bluetooth/bluetooth.d.ts",
+        "references.d.ts"
     ]
 }
