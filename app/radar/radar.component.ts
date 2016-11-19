@@ -8,6 +8,7 @@ import * as bluetooth from 'nativescript-bluetooth';
 })
 export class RadarComponent implements OnInit {
     items = [];
+    connected = [];
     constructor () {
     }
 
@@ -56,11 +57,19 @@ export class RadarComponent implements OnInit {
         let self = this;
         return bluetooth.startScanning({
             serviceUUIDs: [],
-            seconds: 4,
+            seconds: 10,
             onDiscovered: (peripheral) => {
+                let item = {
+                    peripheral: null
+                };
                 try {
-                    this.items.push(peripheral);
-                    self.connect(peripheral);
+                    if (peripheral.name === 'OnyxBeacon' && this.connected.indexOf(peripheral.UUID) === -1) {
+                        item.peripheral = peripheral;
+                        this.items.push(item);
+                        console.log('PERIPHERAL', JSON.stringify(peripheral));
+                        self.connect(peripheral, item);
+                    }
+
                 } catch (err) {
                     console.log('Error', err);
                 }
@@ -69,27 +78,45 @@ export class RadarComponent implements OnInit {
         });
     }
 
-    connect (result) {
+    getMinor(uuid) {
+        return bluetooth.read({
+            peripheralUUID: uuid,
+            serviceUUID: '2aaceb00-c5a5-44fd-0000-3fd42d703a4f',
+            characteristicUUID: '2aaceb00-c5a5-44fd-0200-3fd42d703a4f',
+        }).then(function (result) {
+            var data = new Uint8Array(result.value);
+            return data[0];
+        }).then(function (err) {
+            console.log("read error: " + err);
+        });
+    }
+
+    getMajor(uuid) {
+        return bluetooth.read({
+            peripheralUUID: uuid,
+            serviceUUID: '2aaceb00-c5a5-44fd-0000-3fd42d703a4f',
+            characteristicUUID: '2aaceb00-c5a5-44fd-0300-3fd42d703a4f',
+        }).then(function (result) {
+            var data = new Uint8Array(result.value);
+            return data[0];
+        }).then(function (err) {
+            console.log("read error: " + err);
+        });
+    }
+
+    connect (result, item) {
+        console.log('CONNECTING TO', result.UUID);
+
         return bluetooth.connect({
             UUID: result.UUID,
             onConnected: (peripheral) => {
-
-                console.log(JSON.stringify(peripheral));
-
-
-                // bluetooth.read({
-                //     peripheralUUID: peripheral.UUID,
-                //     serviceUUID: '2aaceb00-c5a5-44fd-0000-3fd42d703a4f',
-                //     characteristicUUID: '2aaceb00-c5a5-44fd-0200-3fd42d703a4f',
-                // }).then(function (result) {
-                //     // fi. a heartrate monitor value (Uint8) can be retrieved like this:
-                //     console.log('RESULT', result);
-                // }).then(function (err) {
-                //     console.log("read error: " + err);
-                // });
-
+                this.connected.push(result.UUID);
+                item.minor = this.getMinor(result.UUID);
+                item.major = this.getMajor(result.UUID);
             },
-            onDisconnected: function (peripheral) {
+            onDisconnected: (peripheral) => {
+                var index = this.connected.indexOf(peripheral.UUID);
+                this.connected.slice(index, 1);
                 console.log("Periperhal disconnected with UUID: " + peripheral.UUID);
             }
         });

@@ -18,15 +18,15 @@
     "@angular/platform-browser": "2.1.2",
     "@angular/platform-browser-dynamic": "2.1.2",
     "@angular/router": "3.1.2",
+    "email-validator": "1.0.7",
     "nativescript-angular": "1.1.2",
-    "nativescript-bluetooth": "^1.1.3",
+    "nativescript-bluetooth": "git+https://github.com/claudiucelfilip/nativescript-bluetooth.git",
+    "nativescript-telerik-ui": "^1.5.1",
     "nativescript-theme-core": "^0.1.3",
     "nativescript-unit-test-runner": "^0.3.4",
-      "nativescript-bluetooth": "git+https://github.com/claudiucelfilip/nativescript-bluetooth.git",
     "reflect-metadata": "~0.1.8",
     "rxjs": "5.0.0-beta.12",
-    "tns-core-modules": "2.4.0",
-      "email-validator": "1.0.7"
+    "tns-core-modules": "2.4.0"
   },
   "devDependencies": {
     "babel-traverse": "6.19.0",

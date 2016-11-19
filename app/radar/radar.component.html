@@ -9,9 +9,13 @@
                 <StackLayout
                     col="0"
                     orientation="horizontal">
-                    <Label [text]="item.name">
+                    <Label [text]="item.peripheral.name">
                     </Label>
-                    <Label [text]="item.RSSI">
+                    <Label [text]="item.peripheral.RSSI">
+                    </Label>
+                    <Label [text]="item.minor | async">
+                    </Label>
+                    <Label [text]="item.major | async">
                     </Label>
                 </StackLayout>
             </GridLayout>
