@@ -1,6 +1,6 @@
 "use strict";
 var application_settings_1 = require("application-settings");
-var tokenKey = "YWRtaW46YWRtaW5hZG1pbg==";
+var tokenKey = "tokenkey";
 var BackendService = (function () {
     function BackendService() {
     }
@@ -17,7 +17,7 @@ var BackendService = (function () {
         enumerable: true,
         configurable: true
     });
-    BackendService.apiUrl = "http://46.101.106.245/api";
+    BackendService.apiUrl = "http://46.101.106.245/api/";
     return BackendService;
 }());
 exports.BackendService = BackendService;

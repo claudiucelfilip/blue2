@@ -5,5 +5,6 @@ export const authProviders = [
 ];
 
 export const appRoutes = [
-    { path: "", redirectTo: "/radar", pathMatch: "full" }
+    { path: "", redirectTo: "/login", pathMatch: "full" },
+    // { path: "", redirectTo: "/radar", pathMatch: "full" }
 ];
