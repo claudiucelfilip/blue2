@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit } from "@angular/core";
 import * as bluetooth from 'nativescript-bluetooth';
+import { Beacon } from '../shared/beacon.service';
 
 @Component({
     selector: "radar",
@@ -9,24 +10,14 @@ import * as bluetooth from 'nativescript-bluetooth';
 export class RadarComponent implements OnInit {
     items = [];
     connected = [];
+
     constructor () {
     }
 
     ngOnInit () {
-        var self = this;
-        console.log('construct');
-
-
         this.checkBluetooth()
             .then(this.checkLocation)
-            .then(rescan());
-
-        function rescan() {
-            console.log('rescanning');
-            return self.scan().then(function() {
-                return rescan();
-            });
-        }
+            .then(this.scan.bind(this));
     }
 
     checkBluetooth () {
@@ -54,72 +45,34 @@ export class RadarComponent implements OnInit {
     }
 
     scan () {
-        let self = this;
-        return bluetooth.startScanning({
-            serviceUUIDs: [],
-            seconds: 10,
-            onDiscovered: (peripheral) => {
-                let item = {
-                    peripheral: null
-                };
-                try {
-                    if (peripheral.name === 'OnyxBeacon' && this.connected.indexOf(peripheral.UUID) === -1) {
-                        item.peripheral = peripheral;
-                        this.items.push(item);
-                        console.log('PERIPHERAL', JSON.stringify(peripheral));
-                        self.connect(peripheral, item);
-                    }
 
-                } catch (err) {
-                    console.log('Error', err);
+        return bluetooth.startScanning({
+
+            onDiscovered: (peripheral) => {
+
+                if (this.connected.filter((item) => item.UUID === peripheral.UUID).length !== 0) {
+                    return;
                 }
 
+                if (!peripheral.name) {
+                    return;
+                }
+
+                let beacon = new Beacon(peripheral);
+
+                beacon.connect()
+                    .then(() => {
+                        this.connected.push(beacon);
+                    })
+                    .then(beacon.getProps.bind(beacon))
+                    .then(() => {
+                        console.log('beacon', beacon.toString());
+                    })
+                    .then(beacon.disconnect.bind(beacon))
+                    .then(() => {
+                        this.connected = this.connected.filter((item) => item.UUID !== beacon.UUID);
+                    });
             }
         });
-    }
-
-    getMinor(uuid) {
-        return bluetooth.read({
-            peripheralUUID: uuid,
-            serviceUUID: '2aaceb00-c5a5-44fd-0000-3fd42d703a4f',
-            characteristicUUID: '2aaceb00-c5a5-44fd-0200-3fd42d703a4f',
-        }).then(function (result) {
-            var data = new Uint8Array(result.value);
-            return data[0];
-        }).then(function (err) {
-            console.log("read error: " + err);
-        });
-    }
-
-    getMajor(uuid) {
-        return bluetooth.read({
-            peripheralUUID: uuid,
-            serviceUUID: '2aaceb00-c5a5-44fd-0000-3fd42d703a4f',
-            characteristicUUID: '2aaceb00-c5a5-44fd-0300-3fd42d703a4f',
-        }).then(function (result) {
-            var data = new Uint8Array(result.value);
-            return data[0];
-        }).then(function (err) {
-            console.log("read error: " + err);
-        });
-    }
-
-    connect (result, item) {
-        console.log('CONNECTING TO', result.UUID);
-
-        return bluetooth.connect({
-            UUID: result.UUID,
-            onConnected: (peripheral) => {
-                this.connected.push(result.UUID);
-                item.minor = this.getMinor(result.UUID);
-                item.major = this.getMajor(result.UUID);
-            },
-            onDisconnected: (peripheral) => {
-                var index = this.connected.indexOf(peripheral.UUID);
-                this.connected.slice(index, 1);
-                console.log("Periperhal disconnected with UUID: " + peripheral.UUID);
-            }
-        });
-
     }
 }
