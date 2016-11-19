@@ -1,0 +1,20 @@
+<GridLayout>
+    <ListView
+    [items]="items">
+
+        <template let-item="item">
+            <GridLayout
+                columns="*, auto"
+                class="container">
+                <StackLayout
+                    col="0"
+                    orientation="horizontal">
+                    <Label [text]="item.name">
+                    </Label>
+                    <Label [text]="item.RSSI">
+                    </Label>
+                </StackLayout>
+            </GridLayout>
+        </template>
+    </ListView>
+</GridLayout>

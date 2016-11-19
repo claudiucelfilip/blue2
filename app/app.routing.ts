@@ -1,3 +1,3 @@
 export const appRoutes = [
-    { path: "", redirectTo: "/login", pathMatch: "full" }
+    { path: "", redirectTo: "/radar", pathMatch: "full" }
 ];

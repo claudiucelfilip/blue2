@@ -5,6 +5,7 @@ var router_1 = require('nativescript-angular/router');
 var core_1 = require("@angular/core");
 var app_component_1 = require("./app.component");
 var login_module_1 = require('./login/login.module');
+var radar_module_1 = require('./radar/radar.module');
 var app_routing_1 = require('./app.routing');
 var AppComponentModule = (function () {
     function AppComponentModule() {
@@ -17,7 +18,8 @@ var AppComponentModule = (function () {
                 platform_1.NativeScriptModule,
                 router_1.NativeScriptRouterModule,
                 router_1.NativeScriptRouterModule.forRoot(app_routing_1.appRoutes),
-                login_module_1.LoginModule
+                login_module_1.LoginModule,
+                radar_module_1.RadarModule
             ],
         }), 
         __metadata('design:paramtypes', [])
