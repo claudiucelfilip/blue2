@@ -22,10 +22,10 @@ var AppComponent = (function () {
         console.log('tap');
     };
     AppComponent.prototype.ngOnInit = function () {
-        console.log('construct');
-        this.checkBluetooth()
-            .then(this.checkLocation)
-            .then(this.scan.bind(this));
+        console.log('test');
+        // this.checkBluetooth()
+        //     .then(this.checkLocation)
+        //     .then(this.scan.bind(this))
     };
     AppComponent.prototype.checkBluetooth = function () {
         return bluetooth.isBluetoothEnabled().then(function (enabled) {

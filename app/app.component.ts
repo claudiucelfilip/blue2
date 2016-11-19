@@ -22,12 +22,13 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit () {
-        console.log('construct');
+        console.log('test');
 
 
-        this.checkBluetooth()
-            .then(this.checkLocation)
-            .then(this.scan.bind(this))
+        // this.checkBluetooth()
+        //     .then(this.checkLocation)
+        //     .then(this.scan.bind(this))
+        
 
     }
 
