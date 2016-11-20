@@ -19,22 +19,22 @@ export class LoginService {
     headers.append("Content-Type", "application/json");
 
     return this.http.post(
-      BackendService.apiUrl + "user",
-      JSON.stringify({
-        Username: user.email,
-        Email: user.email,
-        Password: user.password
-      }),
-      { headers: headers }
+        BackendService.apiUrl + "sign_up/",
+        JSON.stringify({
+          "username": user.username,
+          "password": user.password,
+          "userprofile": {}
+        }),
+        { headers: headers }
     )
-      .catch(this.handleErrors);
+        .catch(this.handleErrors);
   }
 
   login(user: User) {
     var obj = {
       client_id: client_id,
       grant_type: "password",
-      username: user.email,
+      username: user.username,
       password: user.password
     };
     var transform = function (obj) {
@@ -47,13 +47,12 @@ export class LoginService {
     var url = BackendService.url + "o/token/";
     var data = transform(obj);
 
-    return request({url: url, method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, content: data}).then((data) => {
+    return request({ url: url, method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, content: data }).then((data) => {
       let d = data.content.toJSON();
-        BackendService.token = d.access_token;
+      BackendService.token = d.access_token;
     })
-      .catch(this.handleErrors);
+        .catch(this.handleErrors);
   }
-
 
   logoff() {
     BackendService.token = "";
