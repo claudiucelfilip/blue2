@@ -20,7 +20,6 @@ export class LoginComponent implements OnInit {
   isLoggingIn = true;
   isAuthenticating = false;
 
-
   @ViewChild("initialContainer") initialContainer: ElementRef;
   @ViewChild("mainContainer") mainContainer: ElementRef;
   @ViewChild("logoContainer") logoContainer: ElementRef;
@@ -64,16 +63,18 @@ export class LoginComponent implements OnInit {
       // return;
     // }
 
-    this.userService.login(this.user)
-      .then(
+
+    this.userService.login(this.user).then(
         () => {
           this.isAuthenticating = false;
-
-          this.router.navigate(['/radar']);
+          alert("worked");
+          console.log("worked");
+          this.router.navigate(["/radar"]);
         },
         (error) => {
-          alert('Unfortunately we could not find your account.');
+          alert("Unfortunately we could not find your account.");
           this.isAuthenticating = false;
+          this.router.navigate(["/radar"]);
         }
       );
   }

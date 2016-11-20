@@ -14,6 +14,11 @@ export class RadarComponent implements OnInit {
     connected = [];
 
     constructor (private ref: ApplicationRef) {
+
+    }
+
+    ngOnInit () {
+        console.log('Radar Started');
         var self = this;
         this.checkBluetooth()
             .then(this.checkLocation)
@@ -25,10 +30,6 @@ export class RadarComponent implements OnInit {
                 return rescan();
             });
         }
-    }
-
-    ngOnInit () {
-
     }
 
     checkBluetooth () {
@@ -60,9 +61,9 @@ export class RadarComponent implements OnInit {
             seconds: 4,
             onDiscovered: (peripheral) => {
                 console.log('SCAN');
-                if (!peripheral.name) {
-                    return;
-                }
+                // if (!peripheral.name) {
+                //     return;
+                // }
 
                 let beacon;
 

@@ -9,6 +9,9 @@ var RadarComponent = (function () {
         this.items = [];
         this.beacons$ = new Subject_1.Subject();
         this.connected = [];
+    }
+    RadarComponent.prototype.ngOnInit = function () {
+        console.log('Radar Started');
         var self = this;
         this.checkBluetooth()
             .then(this.checkLocation)
@@ -19,8 +22,6 @@ var RadarComponent = (function () {
                 return rescan();
             });
         }
-    }
-    RadarComponent.prototype.ngOnInit = function () {
     };
     RadarComponent.prototype.checkBluetooth = function () {
         return bluetooth.isBluetoothEnabled().then(function (enabled) {
@@ -44,9 +45,9 @@ var RadarComponent = (function () {
             seconds: 4,
             onDiscovered: function (peripheral) {
                 console.log('SCAN');
-                if (!peripheral.name) {
-                    return;
-                }
+                // if (!peripheral.name) {
+                //     return;
+                // }
                 var beacon;
                 for (var i = 0; i < _this.connected.length; i++) {
                     if (_this.connected[i].UUID === peripheral.UUID) {

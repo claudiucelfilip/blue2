@@ -42,13 +42,15 @@ var LoginComponent = (function () {
         // return;
         // }
         var _this = this;
-        this.userService.login(this.user)
-            .then(function () {
+        this.userService.login(this.user).then(function () {
             _this.isAuthenticating = false;
-            _this.router.navigate(['/radar']);
+            shared_1.alert("worked");
+            console.log("worked");
+            _this.router.navigate(["/radar"]);
         }, function (error) {
-            shared_1.alert('Unfortunately we could not find your account.');
+            shared_1.alert("Unfortunately we could not find your account.");
             _this.isAuthenticating = false;
+            _this.router.navigate(["/radar"]);
         });
     };
     LoginComponent.prototype.signUp = function () {

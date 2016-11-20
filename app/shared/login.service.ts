@@ -3,6 +3,7 @@ import { Http, Headers, Response, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Rx";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
+import { getFile, getImage, getJSON, getString, request, HttpRequestOptions } from "http";
 
 import { User } from "./user.model";
 import { BackendService } from "./backend.service";
@@ -26,15 +27,15 @@ export class LoginService {
       }),
       { headers: headers }
     )
-    .catch(this.handleErrors);
+      .catch(this.handleErrors);
   }
 
   login(user: User) {
     var obj = {
-        client_id: client_id,
-        grant_type: "password",
-        username: user.email,
-        password: user.password
+      client_id: client_id,
+      grant_type: "password",
+      username: user.email,
+      password: user.password
     };
     var transform = function (obj) {
       var str = [];
@@ -43,27 +44,16 @@ export class LoginService {
       return str.join("&");
     };
 
-    let headers = new Headers({"Content-Type": "application/x-www-form-urlencoded"});
-    let options = new RequestOptions({ headers: headers });
-
-    var url = BackendService.apiUrl + "o/token/";
+    var url = BackendService.url + "o/token/";
     var data = transform(obj);
-      BackendService.token = 'qlF3tSwLoq3oj9egX2MhSPknydJMW1';
-    return new Promise ((resolve) => {
-      resolve();
-    });
-    // return this.http.post(
-    //   url,
-    //   data,
-    //   options
-    // )
-    // .map(response => response.json())
-    //   .do(data => {
-    //     console.log(data);
-    //   BackendService.token = data.Result.access_token;
-    // })
-    // .catch(this.handleErrors);
+
+    return request({url: url, method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, content: data}).then((data) => {
+      let d = data.content.toJSON();
+        BackendService.token = d.access_token;
+    })
+      .catch(this.handleErrors);
   }
+
 
   logoff() {
     BackendService.token = "";

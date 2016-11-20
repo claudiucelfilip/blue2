@@ -3,30 +3,41 @@ import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-an
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { NgModule } from "@angular/core";
+import { HttpModule } from "@angular/http";
 import { AppComponent } from "./app.component";
 import { LoginModule } from './login/login.module';
-import { authProviders, appRoutes } from './app.routing';
+import { HomeModule } from './home/home.module';
+import { authProviders, APP_ROUTES } from './app.routing';
 import { RadarModule } from './radar/radar.module';
 import { setStatusBarColors, BackendService, LoginService } from "./shared";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
+import { SidemenuComponent } from './shared/sidemenu/sidemenu.component';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [
+        AppComponent,
+        SidemenuComponent
+    ],
     bootstrap: [AppComponent],
-    providers: [
+    providers: [,
     BackendService,
     LoginService,
     authProviders
   ],
 
     imports: [
+        HttpModule,
+        LoginModule,
+        RadarModule,
+        HomeModule,
         NativeScriptModule,
         NativeScriptHttpModule,
         NativeScriptRouterModule,
-        NativeScriptRouterModule.forRoot(appRoutes),
-        LoginModule,
-        RadarModule
+        NativeScriptRouterModule.forRoot(APP_ROUTES)
     ],
+    exports: [
+        NativeScriptHttpModule
+    ]
 })
 class AppComponentModule {}
 
