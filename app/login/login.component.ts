@@ -43,6 +43,10 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
+    if (this.user.email && !this.user.isValidEmail()) {
+      alert("Enter a valid email address.");
+      return;
+    }
     this.isAuthenticating = true;
     if (this.isLoggingIn) {
       this.login();
@@ -71,16 +75,14 @@ export class LoginComponent implements OnInit {
 
   signUp() {
     this.userService.register(this.user)
-      .subscribe(
-        () => {
+      .then(
+        (result) => {
           alert("Your account was successfully created.");
           this.isAuthenticating = false;
           this.toggleDisplay();
         },
-        (message) => {
-          if (message.match(/same user/)) {
-            alert("This username is already in use.");
-          } else {
+        (error) => {
+          if (error) {
             alert("Unfortunately we were unable to create your account.");
           }
           this.isAuthenticating = false;

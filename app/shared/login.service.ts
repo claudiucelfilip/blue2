@@ -15,18 +15,21 @@ export class LoginService {
   constructor(private http: Http) { }
 
   register(user: User) {
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
-
-    return this.http.post(
-      BackendService.apiUrl + "sign_up/",
-      JSON.stringify({
-        "username": user.username,
-        "password": user.password,
-        "userprofile": {}
-      }),
-      { headers: headers }
-    )
+    var res = JSON.stringify({
+      "username": user.username,
+      "password": user.password,
+      "first_name": user.first_name,
+      "last_name": user.last_name,
+      "email": user.email,
+      "userprofile": {
+        "phone": "0"
+      }
+    });
+    return request({
+      url: BackendService.apiUrl + "sign_up/", method: "POST",
+      headers: { "Content-Type":"application/json" },
+      content: res
+    })
       .catch(this.handleErrors);
   }
 

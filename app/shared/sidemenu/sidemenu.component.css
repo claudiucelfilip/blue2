@@ -30,3 +30,11 @@ button {
 .sideLightGrayLabel {
     background-color: lightgray;
 }
+
+.drawerSectionHeader {
+    padding-left: 0;
+}
+
+.drawerSectionItem {
+    padding: 10;
+}

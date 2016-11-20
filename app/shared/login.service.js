@@ -12,13 +12,21 @@ var LoginService = (function () {
         this.http = http;
     }
     LoginService.prototype.register = function (user) {
-        var headers = new http_1.Headers();
-        headers.append("Content-Type", "application/json");
-        return this.http.post(backend_service_1.BackendService.apiUrl + "sign_up/", JSON.stringify({
+        var res = JSON.stringify({
             "username": user.username,
             "password": user.password,
-            "userprofile": {}
-        }), { headers: headers })
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "userprofile": {
+                "phone": "0"
+            }
+        });
+        return http_2.request({
+            url: backend_service_1.BackendService.apiUrl + "sign_up/", method: "POST",
+            headers: { "Content-Type": "application/json" },
+            content: res
+        })
             .catch(this.handleErrors);
     };
     LoginService.prototype.login = function (user) {

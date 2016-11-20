@@ -5,8 +5,10 @@
 </ActionBar>
 <RadSideDrawer #drawer [transition]="sideDrawerTransition" selectionBehaviour="none">
     <StackLayout tkDrawerContent>
-        <Button text="Home" [nsRouterLink]="['/start']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"></Button>
-        <Button text="Radar" [nsRouterLink]="['/start/radar']" nsRouterLinkActive="active"></Button>
+        <StackLayout>
+            <Button text="Home" [nsRouterLink]="['/start']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"></Button>
+            <Button text="Radar" [nsRouterLink]="['/start/radar']" nsRouterLinkActive="active"></Button>
+        </StackLayout>
     </StackLayout>
     <StackLayout tkMainContent>
         <router-outlet></router-outlet>

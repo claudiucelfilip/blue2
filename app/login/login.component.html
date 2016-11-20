@@ -13,11 +13,15 @@
     <StackLayout #mainContainer class="main-container">
         <Label class="main-label" text="BEACONS" [color]="isLoggingIn? 'black' : 'white'"></Label>
 
-        <GridLayout #formControls class="form-controls" rows="auto, auto" translateY="50">
+        <GridLayout #formControls class="form-controls" rows="auto, auto, auto, auto, auto" translateY="50">
             <TextField hint="Username" returnKeyType="next" (returnPress)="focusPassword()" [(ngModel)]="user.username" [isEnabled]="!isAuthenticating" autocorrect="false" autocapitalizationType="none" [class.light]="!isLoggingIn" row="0"></TextField>
             <TextField #password hint="Password" secure="true" returnKeyType="done" (returnPress)="submit()" [(ngModel)]="user.password" [isEnabled]="!isAuthenticating" [class.light]="!isLoggingIn" row="1"></TextField>
 
-            <ActivityIndicator [busy]="isAuthenticating" rowSpan="2"></ActivityIndicator>
+            <TextField [visibility]="!isLoggingIn ? 'visible' : 'collapsed'" hint="First Name" [(ngModel)]="user.first_name" [isEnabled]="!isAuthenticating" autocorrect="false" autocapitalizationType="none" [class.light]="!isLoggingIn" row="2"></TextField>
+            <TextField [visibility]="!isLoggingIn ? 'visible' : 'collapsed'" hint="Last Name" [(ngModel)]="user.last_name" [isEnabled]="!isAuthenticating" autocorrect="false" autocapitalizationType="none" [class.light]="!isLoggingIn" row="3"></TextField>
+            <TextField [visibility]="!isLoggingIn ? 'visible' : 'collapsed'" hint="Email Address" keyboardType="email" returnKeyType="next" [(ngModel)]="user.email" [isEnabled]="!isAuthenticating" autocorrect="false" autocapitalizationType="none" [class.light]="!isLoggingIn"
+                row="4"></TextField>
+            <ActivityIndicator [busy]="isAuthenticating" rowSpan="5"></ActivityIndicator>
         </GridLayout>
 
         <Button [text]="isLoggingIn ? 'Login' : 'Sign up'" [isEnabled]="!isAuthenticating" class="submit-button" (tap)="submit()"></Button>

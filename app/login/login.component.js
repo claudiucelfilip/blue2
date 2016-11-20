@@ -21,6 +21,10 @@ var LoginComponent = (function () {
         this.password.nativeElement.focus();
     };
     LoginComponent.prototype.submit = function () {
+        if (this.user.email && !this.user.isValidEmail()) {
+            shared_1.alert("Enter a valid email address.");
+            return;
+        }
         this.isAuthenticating = true;
         if (this.isLoggingIn) {
             this.login();
@@ -46,15 +50,12 @@ var LoginComponent = (function () {
     LoginComponent.prototype.signUp = function () {
         var _this = this;
         this.userService.register(this.user)
-            .subscribe(function () {
+            .then(function (result) {
             shared_1.alert("Your account was successfully created.");
             _this.isAuthenticating = false;
             _this.toggleDisplay();
-        }, function (message) {
-            if (message.match(/same user/)) {
-                shared_1.alert("This username is already in use.");
-            }
-            else {
+        }, function (error) {
+            if (error) {
                 shared_1.alert("Unfortunately we were unable to create your account.");
             }
             _this.isAuthenticating = false;
