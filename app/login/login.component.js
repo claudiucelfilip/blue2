@@ -2,7 +2,6 @@
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var color_1 = require("color");
-var connectivity_1 = require("connectivity");
 var animation_1 = require("ui/animation");
 var page_1 = require("ui/page");
 var shared_1 = require("../shared");
@@ -14,8 +13,6 @@ var LoginComponent = (function () {
         this.isLoggingIn = true;
         this.isAuthenticating = false;
         this.user = new shared_1.User();
-        this.user.email = "user@beacons.org";
-        this.user.password = "password";
     }
     LoginComponent.prototype.ngOnInit = function () {
         this.page.actionBarHidden = true;
@@ -24,10 +21,6 @@ var LoginComponent = (function () {
         this.password.nativeElement.focus();
     };
     LoginComponent.prototype.submit = function () {
-        // if (!this.user.isValidEmail()) {
-        //   alert("Enter a valid email address.");
-        //   return;
-        // }
         this.isAuthenticating = true;
         if (this.isLoggingIn) {
             this.login();
@@ -44,9 +37,7 @@ var LoginComponent = (function () {
         var _this = this;
         this.userService.login(this.user).then(function () {
             _this.isAuthenticating = false;
-            shared_1.alert("worked");
-            console.log("worked");
-            // this.router.navigate(["/"]);
+            _this.router.navigate(["/start"]);
         }, function (error) {
             shared_1.alert("Unfortunately we could not find your account.");
             _this.isAuthenticating = false;
@@ -54,10 +45,6 @@ var LoginComponent = (function () {
     };
     LoginComponent.prototype.signUp = function () {
         var _this = this;
-        if (connectivity_1.getConnectionType() === connectivity_1.connectionType.none) {
-            shared_1.alert("Beacons requires an internet connection to register.");
-            return;
-        }
         this.userService.register(this.user)
             .subscribe(function () {
             shared_1.alert("Your account was successfully created.");
@@ -65,7 +52,7 @@ var LoginComponent = (function () {
             _this.toggleDisplay();
         }, function (message) {
             if (message.match(/same user/)) {
-                shared_1.alert("This email address is already in use.");
+                shared_1.alert("This username is already in use.");
             }
             else {
                 shared_1.alert("Unfortunately we were unable to create your account.");
@@ -134,7 +121,7 @@ var LoginComponent = (function () {
     ], LoginComponent.prototype, "password", void 0);
     LoginComponent = __decorate([
         core_1.Component({
-            selector: "gr-login",
+            selector: "login",
             templateUrl: "login/login.component.html",
             styleUrls: ["login/login-common.css", "login/login.component.css"],
         }), 

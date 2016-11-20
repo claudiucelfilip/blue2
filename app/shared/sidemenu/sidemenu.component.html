@@ -1,0 +1,14 @@
+<ActionBar title="App Title">
+    <ActionItem (tap)="toggle()">
+        <Button class="fa" text="menu"></Button>
+    </ActionItem>
+</ActionBar>
+<RadSideDrawer #drawer [transition]="sideDrawerTransition" selectionBehaviour="none">
+    <StackLayout tkDrawerContent>
+        <Button text="Home" [nsRouterLink]="['/start']" nsRouterLinkActive="active" [nsRouterLinkActiveOptions]="{exact:true}"></Button>
+        <Button text="Radar" [nsRouterLink]="['/start/radar']" nsRouterLinkActive="active"></Button>
+    </StackLayout>
+    <StackLayout tkMainContent>
+        <router-outlet></router-outlet>
+    </StackLayout>
+</RadSideDrawer>

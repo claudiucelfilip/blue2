@@ -11,7 +11,7 @@ import { TextField } from "ui/text-field";
 import { alert, LoginService, User } from "../shared";
 
 @Component({
-  selector: "gr-login",
+  selector: "login",
   templateUrl: "login/login.component.html",
   styleUrls: ["login/login-common.css", "login/login.component.css"],
 })
@@ -32,8 +32,6 @@ export class LoginComponent implements OnInit {
     private userService: LoginService,
     private page: Page) {
     this.user = new User();
-    this.user.email = "user@beacons.org";
-    this.user.password = "password";
   }
 
   ngOnInit() {
@@ -45,11 +43,6 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    // if (!this.user.isValidEmail()) {
-    //   alert("Enter a valid email address.");
-    //   return;
-    // }
-
     this.isAuthenticating = true;
     if (this.isLoggingIn) {
       this.login();
@@ -67,9 +60,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.user).then(
         () => {
           this.isAuthenticating = false;
-          alert("worked");
-          console.log("worked");
-          // this.router.navigate(["/"]);
+          this.router.navigate(["/start"]);
         },
         (error) => {
           alert("Unfortunately we could not find your account.");
@@ -79,11 +70,6 @@ export class LoginComponent implements OnInit {
   }
 
   signUp() {
-    if (getConnectionType() === connectionType.none) {
-      alert("Beacons requires an internet connection to register.");
-      return;
-    }
-
     this.userService.register(this.user)
       .subscribe(
         () => {
@@ -93,7 +79,7 @@ export class LoginComponent implements OnInit {
         },
         (message) => {
           if (message.match(/same user/)) {
-            alert("This email address is already in use.");
+            alert("This username is already in use.");
           } else {
             alert("Unfortunately we were unable to create your account.");
           }
