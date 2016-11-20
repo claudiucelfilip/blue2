@@ -24,7 +24,7 @@ export class Beacon {
         this.name = peripheral.name;
         this.UUID = peripheral.UUID;
         this.RSSI = peripheral.RSSI;
-        console.log('RSSI', this.name, this.UUID, peripheral.RSSI);
+
         this.getDistance();
     }
     connect () {
@@ -52,7 +52,7 @@ export class Beacon {
 
     getDistance () {
         let txPower = -72;
-        let result;
+        let result: number;
 
         if (this.RSSI == 0) {
             result = -1.0;
@@ -66,7 +66,7 @@ export class Beacon {
             result = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
         }
 
-        this.distance = result;
+        this.distance = result.toFixed(2);
     }
 
     getMinor () {

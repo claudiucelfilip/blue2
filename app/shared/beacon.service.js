@@ -14,7 +14,6 @@ var Beacon = (function () {
         this.name = peripheral.name;
         this.UUID = peripheral.UUID;
         this.RSSI = peripheral.RSSI;
-        console.log('RSSI', this.name, this.UUID, peripheral.RSSI);
         this.getDistance();
     };
     Beacon.prototype.connect = function () {
@@ -52,7 +51,7 @@ var Beacon = (function () {
         else {
             result = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
         }
-        this.distance = result;
+        this.distance = result.toFixed(2);
     };
     Beacon.prototype.getMinor = function () {
         var _this = this;
@@ -63,6 +62,7 @@ var Beacon = (function () {
         }).then(function (result) {
             var data = new Uint16Array(result.value);
             _this.minor = data[0];
+            console.log('MINOR', _this.minor);
         });
     };
     Beacon.prototype.getMajor = function () {
@@ -74,6 +74,7 @@ var Beacon = (function () {
         }).then(function (result) {
             var data = new Uint8Array(result.value);
             _this.major = data[0];
+            console.log('MAJOR', _this.major);
         });
     };
     Beacon.prototype.toString = function () {

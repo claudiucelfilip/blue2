@@ -44,10 +44,9 @@ var RadarComponent = (function () {
         return bluetooth.startScanning({
             seconds: 4,
             onDiscovered: function (peripheral) {
-                console.log('SCAN');
-                // if (!peripheral.name) {
-                //     return;
-                // }
+                if (!peripheral.name) {
+                    return;
+                }
                 var beacon;
                 for (var i = 0; i < _this.connected.length; i++) {
                     if (_this.connected[i].UUID === peripheral.UUID) {
@@ -58,7 +57,17 @@ var RadarComponent = (function () {
                 if (!beacon) {
                     beacon = new beacon_service_1.Beacon(peripheral);
                     _this.connected.push(beacon);
+                    console.log('CONNNN');
+                    beacon.connect()
+                        .then(beacon.getProps.bind(beacon))
+                        .then(function () {
+                        _this.connected = _this.connected.slice(0);
+                        _this.ref.tick();
+                    })
+                        .then(beacon.disconnect.bind(beacon));
                 }
+                _this.connected = _this.connected.slice(0);
+                _this.ref.tick();
             }
         });
     };

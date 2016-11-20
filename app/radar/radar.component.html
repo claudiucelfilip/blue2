@@ -1,7 +1,6 @@
 <GridLayout>
     <StackLayout orientation="vertical">
-        <Label
-        [text]="connected"></Label>
+
         <ListView
                 [items]="connected">
 
@@ -14,7 +13,7 @@
                             orientation="vertical">
                         <Label [text]="item.name">
                         </Label>
-                        <Label [text]="item.RSSI">
+                        <Label [text]="item.distance">
                         </Label>
                         <Label [text]="item.minor">
                         </Label>

@@ -60,10 +60,10 @@ export class RadarComponent implements OnInit {
         return bluetooth.startScanning({
             seconds: 4,
             onDiscovered: (peripheral) => {
-                console.log('SCAN');
-                // if (!peripheral.name) {
-                //     return;
-                // }
+
+                if (!peripheral.name) {
+                    return;
+                }
 
                 let beacon;
 
@@ -77,11 +77,10 @@ export class RadarComponent implements OnInit {
                 if (!beacon) {
                     beacon = new Beacon(peripheral);
                     this.connected.push(beacon);
-
-                    // beacon.connect()
-                    //     .then(beacon.getProps.bind(beacon))
-                    //     .then(beacon.disconnect.bind(beacon));
                 }
+
+                this.connected = this.connected.slice(0);
+                this.ref.tick();
             }
         });
     }
