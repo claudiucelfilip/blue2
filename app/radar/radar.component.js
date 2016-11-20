@@ -2,15 +2,25 @@
 var core_1 = require("@angular/core");
 var bluetooth = require('nativescript-bluetooth');
 var beacon_service_1 = require('../shared/beacon.service');
+var Subject_1 = require('rxjs/Subject');
 var RadarComponent = (function () {
-    function RadarComponent() {
+    function RadarComponent(ref) {
+        this.ref = ref;
         this.items = [];
+        this.beacons$ = new Subject_1.Subject();
         this.connected = [];
-    }
-    RadarComponent.prototype.ngOnInit = function () {
+        var self = this;
         this.checkBluetooth()
             .then(this.checkLocation)
-            .then(this.scan.bind(this));
+            .then(rescan());
+        function rescan() {
+            console.log('rescanning');
+            return self.scan().then(function () {
+                return rescan();
+            });
+        }
+    }
+    RadarComponent.prototype.ngOnInit = function () {
     };
     RadarComponent.prototype.checkBluetooth = function () {
         return bluetooth.isBluetoothEnabled().then(function (enabled) {
@@ -31,26 +41,23 @@ var RadarComponent = (function () {
     RadarComponent.prototype.scan = function () {
         var _this = this;
         return bluetooth.startScanning({
+            seconds: 4,
             onDiscovered: function (peripheral) {
-                if (_this.connected.filter(function (item) { return item.UUID === peripheral.UUID; }).length !== 0) {
-                    return;
-                }
+                console.log('SCAN');
                 if (!peripheral.name) {
                     return;
                 }
-                var beacon = new beacon_service_1.Beacon(peripheral);
-                beacon.connect()
-                    .then(function () {
+                var beacon;
+                for (var i = 0; i < _this.connected.length; i++) {
+                    if (_this.connected[i].UUID === peripheral.UUID) {
+                        beacon = _this.connected[i];
+                        beacon.update(peripheral);
+                    }
+                }
+                if (!beacon) {
+                    beacon = new beacon_service_1.Beacon(peripheral);
                     _this.connected.push(beacon);
-                })
-                    .then(beacon.getProps.bind(beacon))
-                    .then(function () {
-                    console.log('beacon', beacon.toString());
-                })
-                    .then(beacon.disconnect.bind(beacon))
-                    .then(function () {
-                    _this.connected = _this.connected.filter(function (item) { return item.UUID !== beacon.UUID; });
-                });
+                }
             }
         });
     };
@@ -60,7 +67,7 @@ var RadarComponent = (function () {
             templateUrl: "radar/radar.component.html",
             styleUrls: ["radar/radar.component.css", "radar/radar.component.css"],
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [core_1.ApplicationRef])
     ], RadarComponent);
     return RadarComponent;
 }());

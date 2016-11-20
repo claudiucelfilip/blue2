@@ -65,15 +65,14 @@ export class LoginComponent implements OnInit {
     // }
 
     this.userService.login(this.user)
-      .subscribe(
+      .then(
         () => {
           this.isAuthenticating = false;
-          alert("worked");
-          console.log("worked");
-          // this.router.navigate(["/"]);
+
+          this.router.navigate(['/radar']);
         },
         (error) => {
-          alert("Unfortunately we could not find your account.");
+          alert('Unfortunately we could not find your account.');
           this.isAuthenticating = false;
         }
       );

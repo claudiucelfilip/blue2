@@ -43,13 +43,11 @@ var LoginComponent = (function () {
         // }
         var _this = this;
         this.userService.login(this.user)
-            .subscribe(function () {
+            .then(function () {
             _this.isAuthenticating = false;
-            shared_1.alert("worked");
-            console.log("worked");
-            // this.router.navigate(["/"]);
+            _this.router.navigate(['/radar']);
         }, function (error) {
-            shared_1.alert("Unfortunately we could not find your account.");
+            shared_1.alert('Unfortunately we could not find your account.');
             _this.isAuthenticating = false;
         });
     };

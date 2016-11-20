@@ -11,9 +11,7 @@ export class Beacon {
     distance;
 
     constructor (peripheral) {
-        this.name = peripheral.name;
-        this.UUID = peripheral.UUID;
-        this.RSSI = peripheral.RSSI;
+        this.update(peripheral);
     }
 
     disconnect () {
@@ -22,11 +20,19 @@ export class Beacon {
         });
     }
 
+    update (peripheral) {
+        this.name = peripheral.name;
+        this.UUID = peripheral.UUID;
+        this.RSSI = peripheral.RSSI;
+        console.log('RSSI', this.name, this.UUID, peripheral.RSSI);
+        this.getDistance();
+    }
     connect () {
         return new Promise((resolve) => {
             bluetooth.connect({
                 UUID: this.UUID,
                 onConnected: (peripheral) => {
+                    console.log('CONNECTED', this.name);
                     resolve(peripheral);
                 },
                 onDisconnected: () => {
@@ -34,14 +40,11 @@ export class Beacon {
                 }
             });
         });
-
     }
-
 
     getProps () {
         return this.getMinor()
             .then(this.getMajor.bind(this))
-            .then(this.getDistance.bind(this))
             .catch((err) => {
                 console.log(err);
             });

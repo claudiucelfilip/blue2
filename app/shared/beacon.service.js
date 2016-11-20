@@ -3,14 +3,19 @@ var core_1 = require('@angular/core');
 var bluetooth = require('nativescript-bluetooth');
 var Beacon = (function () {
     function Beacon(peripheral) {
-        this.name = peripheral.name;
-        this.UUID = peripheral.UUID;
-        this.RSSI = peripheral.RSSI;
+        this.update(peripheral);
     }
     Beacon.prototype.disconnect = function () {
         return bluetooth.disconnect({
             UUID: this.UUID
         });
+    };
+    Beacon.prototype.update = function (peripheral) {
+        this.name = peripheral.name;
+        this.UUID = peripheral.UUID;
+        this.RSSI = peripheral.RSSI;
+        console.log('RSSI', this.name, this.UUID, peripheral.RSSI);
+        this.getDistance();
     };
     Beacon.prototype.connect = function () {
         var _this = this;
@@ -18,6 +23,7 @@ var Beacon = (function () {
             bluetooth.connect({
                 UUID: _this.UUID,
                 onConnected: function (peripheral) {
+                    console.log('CONNECTED', _this.name);
                     resolve(peripheral);
                 },
                 onDisconnected: function () {
@@ -29,7 +35,6 @@ var Beacon = (function () {
     Beacon.prototype.getProps = function () {
         return this.getMinor()
             .then(this.getMajor.bind(this))
-            .then(this.getDistance.bind(this))
             .catch(function (err) {
             console.log(err);
         });

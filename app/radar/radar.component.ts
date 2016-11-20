@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ApplicationRef } from "@angular/core";
 import * as bluetooth from 'nativescript-bluetooth';
 import { Beacon } from '../shared/beacon.service';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     selector: "radar",
@@ -9,15 +10,25 @@ import { Beacon } from '../shared/beacon.service';
 })
 export class RadarComponent implements OnInit {
     items = [];
+    beacons$ = new Subject<any>();
     connected = [];
 
-    constructor () {
+    constructor (private ref: ApplicationRef) {
+        var self = this;
+        this.checkBluetooth()
+            .then(this.checkLocation)
+            .then(rescan());
+
+        function rescan() {
+            console.log('rescanning');
+            return self.scan().then(function() {
+                return rescan();
+            });
+        }
     }
 
     ngOnInit () {
-        this.checkBluetooth()
-            .then(this.checkLocation)
-            .then(this.scan.bind(this));
+
     }
 
     checkBluetooth () {
@@ -45,33 +56,31 @@ export class RadarComponent implements OnInit {
     }
 
     scan () {
-
         return bluetooth.startScanning({
-
+            seconds: 4,
             onDiscovered: (peripheral) => {
-
-                if (this.connected.filter((item) => item.UUID === peripheral.UUID).length !== 0) {
-                    return;
-                }
-
+                console.log('SCAN');
                 if (!peripheral.name) {
                     return;
                 }
 
-                let beacon = new Beacon(peripheral);
+                let beacon;
 
-                beacon.connect()
-                    .then(() => {
-                        this.connected.push(beacon);
-                    })
-                    .then(beacon.getProps.bind(beacon))
-                    .then(() => {
-                        console.log('beacon', beacon.toString());
-                    })
-                    .then(beacon.disconnect.bind(beacon))
-                    .then(() => {
-                        this.connected = this.connected.filter((item) => item.UUID !== beacon.UUID);
-                    });
+                for (let i = 0 ; i < this.connected.length; i++) {
+                    if (this.connected[i].UUID === peripheral.UUID) {
+                        beacon = this.connected[i];
+                        beacon.update(peripheral);
+                    }
+                }
+
+                if (!beacon) {
+                    beacon = new Beacon(peripheral);
+                    this.connected.push(beacon);
+
+                    // beacon.connect()
+                    //     .then(beacon.getProps.bind(beacon))
+                    //     .then(beacon.disconnect.bind(beacon));
+                }
             }
         });
     }

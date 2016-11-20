@@ -48,17 +48,21 @@ export class LoginService {
 
     var url = BackendService.apiUrl + "o/token/";
     var data = transform(obj);
-    return this.http.post(
-      url,
-      data,
-      options
-    )
-    .map(response => response.json())
-      .do(data => {
-        console.log(data);
-      BackendService.token = data.Result.access_token;
-    })
-    .catch(this.handleErrors);
+      BackendService.token = 'qlF3tSwLoq3oj9egX2MhSPknydJMW1';
+    return new Promise ((resolve) => {
+      resolve();
+    });
+    // return this.http.post(
+    //   url,
+    //   data,
+    //   options
+    // )
+    // .map(response => response.json())
+    //   .do(data => {
+    //     console.log(data);
+    //   BackendService.token = data.Result.access_token;
+    // })
+    // .catch(this.handleErrors);
   }
 
   logoff() {

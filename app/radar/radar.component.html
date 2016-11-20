@@ -1,24 +1,29 @@
 <GridLayout>
-    <ListView
-    [items]="items">
+    <StackLayout orientation="vertical">
+        <Label
+        [text]="JSON.stringify(connected)"></Label>
+        <ListView
+                [items]="connected">
 
-        <template let-item="item">
-            <GridLayout
-                columns="*, auto"
-                class="container">
-                <StackLayout
-                    col="0"
-                    orientation="vertical">
-                    <Label [text]="item.peripheral.name">
-                    </Label>
-                    <Label [text]="item.distance">
-                    </Label>
-                    <Label [text]="item.minor">
-                    </Label>
-                    <Label [text]="item.major">
-                    </Label>
-                </StackLayout>
-            </GridLayout>
-        </template>
-    </ListView>
+            <template let-item="item">
+                <GridLayout
+                        columns="*, auto"
+                        class="container">
+                    <StackLayout
+                            col="0"
+                            orientation="vertical">
+                        <Label [text]="item.name">
+                        </Label>
+                        <Label [text]="item.RSSI">
+                        </Label>
+                        <Label [text]="item.minor">
+                        </Label>
+                        <Label [text]="item.major">
+                        </Label>
+                    </StackLayout>
+                </GridLayout>
+            </template>
+        </ListView>
+    </StackLayout>
+
 </GridLayout>

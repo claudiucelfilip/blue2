@@ -37,13 +37,21 @@ var LoginService = (function () {
         var options = new http_1.RequestOptions({ headers: headers });
         var url = backend_service_1.BackendService.apiUrl + "o/token/";
         var data = transform(obj);
-        return this.http.post(url, data, options)
-            .map(function (response) { return response.json(); })
-            .do(function (data) {
-            console.log(data);
-            backend_service_1.BackendService.token = data.Result.access_token;
-        })
-            .catch(this.handleErrors);
+        backend_service_1.BackendService.token = 'qlF3tSwLoq3oj9egX2MhSPknydJMW1';
+        return new Promise(function (resolve) {
+            resolve();
+        });
+        // return this.http.post(
+        //   url,
+        //   data,
+        //   options
+        // )
+        // .map(response => response.json())
+        //   .do(data => {
+        //     console.log(data);
+        //   BackendService.token = data.Result.access_token;
+        // })
+        // .catch(this.handleErrors);
     };
     LoginService.prototype.logoff = function () {
         backend_service_1.BackendService.token = "";
