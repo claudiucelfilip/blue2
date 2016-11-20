@@ -15,6 +15,7 @@ import { authProviders, APP_ROUTES } from './app.routing';
 import { RadarModule } from './radar/radar.module';
 import { setStatusBarColors, BackendService, LoginService } from "./shared";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
+import { LostBeaconsService } from './shared/lostBeacons.service';
 
 @NgModule({
     declarations: [SIDEDRAWER_DIRECTIVES, AppComponent, SidemenuComponent],
@@ -22,7 +23,8 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
     providers: [
         BackendService,
         LoginService,
-        authProviders
+        authProviders,
+        LostBeaconsService
     ],
     imports: [
         NativeScriptModule,

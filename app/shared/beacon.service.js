@@ -62,7 +62,6 @@ var Beacon = (function () {
         }).then(function (result) {
             var data = new Uint16Array(result.value);
             _this.minor = data[0];
-            console.log('MINOR', _this.minor);
         });
     };
     Beacon.prototype.getMajor = function () {
@@ -74,7 +73,6 @@ var Beacon = (function () {
         }).then(function (result) {
             var data = new Uint8Array(result.value);
             _this.major = data[0];
-            console.log('MAJOR', _this.major);
         });
     };
     Beacon.prototype.toString = function () {

@@ -1,7 +1,11 @@
 import { Component, ElementRef, OnInit, ApplicationRef } from "@angular/core";
 import * as bluetooth from 'nativescript-bluetooth';
 import { Beacon } from '../shared/beacon.service';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { LostBeaconsService } from '../shared/lostBeacons.service';
+import 'rxjs/add/observable/combineLatest';
+
 
 @Component({
     selector: "radar",
@@ -10,26 +14,57 @@ import { Subject } from 'rxjs/Subject';
 })
 export class RadarComponent implements OnInit {
     items = [];
-    beacons$ = new Subject<any>();
-    connected = [];
+    beacons;
+    connected;
+    connected$: BehaviorSubject<any>;
 
-    constructor (private ref: ApplicationRef) {
-
+    constructor (private ref: ApplicationRef, private lostBeacons: LostBeaconsService) {
+        this.connected$ = new BehaviorSubject([]);
     }
 
     ngOnInit () {
-        console.log('Radar Started');
-        var self = this;
-        this.checkBluetooth()
-            .then(this.checkLocation)
-            .then(rescan());
 
-        function rescan() {
-            console.log('rescanning');
-            return self.scan().then(function() {
-                return rescan();
-            });
-        }
+        // this.lostBeacons.beacons().then((beacons) => {
+        //     console.log(JSON.stringify(beacons));
+        // });
+        let beacons = this.lostBeacons.beacons();
+
+        Observable.combineLatest(
+            this.connected$,
+            beacons,
+            (connected, beacons) => {
+                return beacons.map((beacon) => {
+                    let c = connected.filter(item => {
+                        return item.UUID === beacon.beacon.unique_id;
+                    })[0];
+
+                    if (c) {
+                        for (var key in c) {
+                            if (c.hasOwnProperty(c)) {
+                                beacon[key] = c[key];
+                            }
+                        }
+                    }
+
+                    return beacon;
+                })
+            }
+        ).subscribe((beacons) => {
+            console.log(JSON.stringify(beacons));
+        });
+
+        console.log('Radar Started');
+        // var self = this;
+        // this.checkBluetooth()
+        //     .then(this.checkLocation)
+        //     .then(rescan());
+        //
+        // function rescan() {
+        //     console.log('rescanning');
+        //     return self.scan().then(function() {
+        //         return rescan();
+        //     });
+        // }
     }
 
     checkBluetooth () {
@@ -67,7 +102,7 @@ export class RadarComponent implements OnInit {
 
                 let beacon;
 
-                for (let i = 0 ; i < this.connected.length; i++) {
+                for (let i = 0; i < this.connected.length; i++) {
                     if (this.connected[i].UUID === peripheral.UUID) {
                         beacon = this.connected[i];
                         beacon.update(peripheral);
@@ -80,6 +115,7 @@ export class RadarComponent implements OnInit {
                 }
 
                 this.connected = this.connected.slice(0);
+                this.connected$.next(this.connected);
                 this.ref.tick();
             }
         });

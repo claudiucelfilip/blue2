@@ -2,6 +2,28 @@
     <StackLayout orientation="vertical">
 
         <ListView
+                [items]="beacons">
+
+            <template let-item="item">
+                <GridLayout
+                        columns="*, auto"
+                        class="container">
+                    <StackLayout
+                            col="0"
+                            orientation="vertical">
+                        <Label [text]="item.name">
+                        </Label>
+                        <Label [text]="item.distance">
+                        </Label>
+                        <Label [text]="item.minor">
+                        </Label>
+                        <Label [text]="item.major">
+                        </Label>
+                    </StackLayout>
+                </GridLayout>
+            </template>
+        </ListView>
+        <ListView
                 [items]="connected">
 
             <template let-item="item">

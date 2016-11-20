@@ -13,6 +13,7 @@ var app_routing_1 = require('./app.routing');
 var radar_module_1 = require('./radar/radar.module');
 var shared_1 = require("./shared");
 var http_2 = require("nativescript-angular/http");
+var lostBeacons_service_1 = require('./shared/lostBeacons.service');
 var AppComponentModule = (function () {
     function AppComponentModule() {
     }
@@ -23,7 +24,8 @@ var AppComponentModule = (function () {
             providers: [
                 shared_1.BackendService,
                 shared_1.LoginService,
-                app_routing_1.authProviders
+                app_routing_1.authProviders,
+                lostBeacons_service_1.LostBeaconsService
             ],
             imports: [
                 platform_1.NativeScriptModule,

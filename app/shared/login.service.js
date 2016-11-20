@@ -14,10 +14,10 @@ var LoginService = (function () {
     LoginService.prototype.register = function (user) {
         var headers = new http_1.Headers();
         headers.append("Content-Type", "application/json");
-        return this.http.post(backend_service_1.BackendService.apiUrl + "user", JSON.stringify({
-            Username: user.email,
-            Email: user.email,
-            Password: user.password
+        return this.http.post(backend_service_1.BackendService.apiUrl + "sign_up/", JSON.stringify({
+            "username": user.username,
+            "password": user.password,
+            "userprofile": {}
         }), { headers: headers })
             .catch(this.handleErrors);
     };
@@ -25,7 +25,7 @@ var LoginService = (function () {
         var obj = {
             client_id: client_id,
             grant_type: "password",
-            username: user.email,
+            username: user.username,
             password: user.password
         };
         var transform = function (obj) {
