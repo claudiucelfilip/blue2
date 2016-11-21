@@ -3,48 +3,33 @@
 
         <ListView
                 [items]="beacons">
-
             <template let-item="item">
                 <GridLayout
+                        [style.backgroundColor]="item.background"
+                        [style.fontWeight]="'bold'"
                         columns="*, auto"
                         class="container">
                     <StackLayout
                             col="0"
                             orientation="vertical">
-                        <Label [text]="item.name">
-                        </Label>
-                        <Label [text]="item.distance">
-                        </Label>
-                        <Label [text]="item.minor">
-                        </Label>
-                        <Label [text]="item.major">
-                        </Label>
-                    </StackLayout>
-                </GridLayout>
-            </template>
-        </ListView>
-        <ListView
-                [items]="connected">
-
-            <template let-item="item">
-                <GridLayout
-                        columns="*, auto"
-                        class="container">
-                    <StackLayout
-                            col="0"
-                            orientation="vertical">
-                        <Label [text]="item.name">
-                        </Label>
-                        <Label [text]="item.distance">
-                        </Label>
-                        <Label [text]="item.minor">
-                        </Label>
-                        <Label [text]="item.major">
-                        </Label>
+                        <StackLayout rows="0" orientation="horizontal">
+                            <Label text="Name: "></Label><Label [text]="item.beacon.user && item.beacon.user.last_name"></Label>
+                        </StackLayout>
+                        <StackLayout rows="0" orientation="horizontal">
+                            <Label text="Description: "></Label><Label [text]="item.beacon.description"></Label>
+                        </StackLayout>
+                        <StackLayout rows="0" orientation="horizontal">
+                            <Label text="Beacon: "></Label><Label [text]="item.name"></Label>
+                        </StackLayout>
+                        <StackLayout rows="0" orientation="horizontal">
+                            <Label text="Reward: "></Label><Label [text]="item.reward"></Label>
+                        </StackLayout>
+                        <StackLayout rows="0" orientation="horizontal">
+                            <Label text="Distance: "></Label><Label [text]="item.distance"></Label>
+                        </StackLayout>
                     </StackLayout>
                 </GridLayout>
             </template>
         </ListView>
     </StackLayout>
-
 </GridLayout>

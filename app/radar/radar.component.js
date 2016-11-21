@@ -11,42 +11,51 @@ var RadarComponent = (function () {
         this.ref = ref;
         this.lostBeacons = lostBeacons;
         this.items = [];
+        this.beacons = [];
+        this.connected = [];
         this.connected$ = new BehaviorSubject_1.BehaviorSubject([]);
     }
     RadarComponent.prototype.ngOnInit = function () {
+        var self = this;
         // this.lostBeacons.beacons().then((beacons) => {
         //     console.log(JSON.stringify(beacons));
         // });
         var beacons = this.lostBeacons.beacons();
+        var first = false;
         Observable_1.Observable.combineLatest(this.connected$, beacons, function (connected, beacons) {
+            beacons = beacons.filter(function (b) { return b.date !== "2016-11-20T12:00:00Z"; });
             return beacons.map(function (beacon) {
                 var c = connected.filter(function (item) {
                     return item.UUID === beacon.beacon.unique_id;
-                })[0];
-                if (c) {
+                });
+                if (c.length) {
+                    c = c.pop();
                     for (var key in c) {
-                        if (c.hasOwnProperty(c)) {
+                        if (c.hasOwnProperty(key)) {
                             beacon[key] = c[key];
                         }
                     }
+                    first = true;
+                    var val = Math.abs((-100 / c.RSSI));
+                    beacon.background = "rgba(255, 0, 0, " + val + ")";
                 }
                 return beacon;
             });
-        }).subscribe(function (beacons) {
+        })
+            .subscribe(function (beacons) {
             console.log(JSON.stringify(beacons));
+            self.beacons = beacons; //.filter(beacon => beacon.distance);
         });
-        console.log('Radar Started');
-        // var self = this;
-        // this.checkBluetooth()
-        //     .then(this.checkLocation)
-        //     .then(rescan());
-        //
-        // function rescan() {
-        //     console.log('rescanning');
-        //     return self.scan().then(function() {
-        //         return rescan();
-        //     });
-        // }
+        var self = this;
+        this.checkBluetooth()
+            .then(this.checkLocation)
+            .then(rescan());
+        function rescan() {
+            console.log('rescanning');
+            return self.scan().then(function () {
+                return rescan();
+            });
+        }
     };
     RadarComponent.prototype.checkBluetooth = function () {
         return bluetooth.isBluetoothEnabled().then(function (enabled) {
@@ -65,7 +74,7 @@ var RadarComponent = (function () {
         });
     };
     RadarComponent.prototype.scan = function () {
-        var _this = this;
+        var self = this;
         return bluetooth.startScanning({
             seconds: 4,
             onDiscovered: function (peripheral) {
@@ -73,19 +82,18 @@ var RadarComponent = (function () {
                     return;
                 }
                 var beacon;
-                for (var i = 0; i < _this.connected.length; i++) {
-                    if (_this.connected[i].UUID === peripheral.UUID) {
-                        beacon = _this.connected[i];
+                for (var i = 0; i < self.connected.length; i++) {
+                    if (self.connected[i].UUID === peripheral.UUID) {
+                        beacon = self.connected[i];
                         beacon.update(peripheral);
                     }
                 }
                 if (!beacon) {
                     beacon = new beacon_service_1.Beacon(peripheral);
-                    _this.connected.push(beacon);
+                    self.connected.push(beacon);
                 }
-                _this.connected = _this.connected.slice(0);
-                _this.connected$.next(_this.connected);
-                _this.ref.tick();
+                self.connected$.next(self.connected);
+                self.ref.tick();
             }
         });
     };
